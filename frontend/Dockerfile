@@ -3,6 +3,7 @@ FROM node:lts-alpine as build-step
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json  ./
+COPY jsconfig.json  ./
 COPY ./src ./src
 COPY ./public ./public
 RUN npm install
