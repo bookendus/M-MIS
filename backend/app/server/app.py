@@ -2,11 +2,21 @@ from fastapi import FastAPI, Depends
 
 from app.server.database import init_db
 
-from app.server.routes.product_review import router as RouterReviews
+
 from app.server.models.users import (UserCreate, UserRead, UserUpdate, User, 
                                      auth_backend, current_active_user, fastapi_users,
                                      google_oauth_client,
 )
+from app.server.routes.customers import router as RouterCustomers
+from app.server.routes.projects import router as RouterProjects
+from app.server.routes.timeframes import router as RouterTimeFrames
+from app.server.routes.attendances import router as RouterAttendances
+
+
+#from app.server.routes.employees import router as RouterEmployee
+#from app.server.routes.product_review import router as RouterReviews
+
+
 
 from app.secret import SECRET
 
@@ -46,10 +56,15 @@ async def authenticated_route(user: User = Depends(current_active_user)):
     return {"message": f"Hello {user.email}!"}
 
 
+app.include_router(RouterCustomers, tags=["Customers"], prefix="/customers")
+app.include_router(RouterProjects, tags=["Projects"], prefix="/projects")
+app.include_router(RouterTimeFrames, tags=["TimeFrames"], prefix="/timeframes")
+app.include_router(RouterAttendances, tags=["Attendances"], prefix="/attendances")
 
 
 
-app.include_router(RouterReviews, tags=["Product Reviews"], prefix="/reviews")
+#app.include_router(RouterEmployee, tags=["Employee"], prefix="/employees")
+#app.include_router(RouterReviews, tags=["Product Reviews"], prefix="/reviews")
 
 
 @app.on_event("startup")
