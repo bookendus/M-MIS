@@ -17,7 +17,13 @@ from httpx_oauth.clients.google import GoogleOAuth2
 
 from app.secret import SECRET, GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET
 
-google_oauth_client = GoogleOAuth2( GOOGLE_OAUTH_CLIENT_ID , GOOGLE_OAUTH_CLIENT_SECRET )
+google_oauth_client = GoogleOAuth2( client_id=GOOGLE_OAUTH_CLIENT_ID ,
+                                    client_secret=GOOGLE_OAUTH_CLIENT_SECRET, 
+                                   scopes=[
+                                        # "https://www.googleapis.com/auth/userinfo.email", # 구글 클라우드에서 설정한 scope
+                                        # "https://www.googleapis.com/auth/userinfo.profile",
+                                        "openid"
+                                    ], )
 
 class OAuthAccount(BaseOAuthAccount):
     pass

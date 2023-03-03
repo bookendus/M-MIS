@@ -117,7 +117,7 @@ function SignIn() {
             _hover={googleHover}
             _active={googleActive}
             _focus={googleActive}
-            onClick={event => window.location.href='https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost:3000/horizon-ui-chakra&client_id=171244042674-cj5o3p12b4nbtag45gduahi0ojksbgop.apps.googleusercontent.com'}>
+            onClick={event => window.location.href='https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost:8000/auth/google/callback&client_id=171244042674-cj5o3p12b4nbtag45gduahi0ojksbgop.apps.googleusercontent.com'}>
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
             Sign in with Google
           </Button>
