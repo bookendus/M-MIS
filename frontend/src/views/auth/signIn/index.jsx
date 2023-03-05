@@ -21,8 +21,11 @@
 
 */
 
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import axios from "axios";
+
+import { NavLink, useLocation,  } from "react-router-dom";
+
 // Chakra imports
 import {
   Box,
@@ -45,8 +48,8 @@ import DefaultAuth from "layouts/auth/Default";
 // Assets
 import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { RiEyeCloseLine } from "react-icons/ri";
+// import { MdOutlineRemoveRedEye } from "react-icons/md";
+// import { RiEyeCloseLine } from "react-icons/ri";
 
 function SignIn() {
   // Chakra color mode
@@ -66,7 +69,34 @@ function SignIn() {
     { bg: "whiteAlpha.200" }
   );
   const [show, setShow] = React.useState(false);
-  const handleClick = () => setShow(!show);
+  const [data, setData] = React.useState([]);
+  // const [text, setText] = React.useState('No Access Token');
+  const location = useLocation();
+
+  console.log(location.search);
+
+  if (location.search) { // backend: to callback 
+    useEffect(async () => {
+        await axios
+        .get('http://localhost:8000/auth/google/callback' + location.search)
+        .then((response) => { 
+            console.log('Recieved Data', response);
+            // setText(`Token: ${response.access_token}`);
+            // storage.set('access_token', text);
+            window.localStorage.setItem('access_token', response.data.access_token);
+        });
+    }, []);
+  } else { // backend: to getting google auth url
+    useEffect(async () => {
+        await axios
+        .get('http://localhost:8000/auth/google/authorize')
+        .then((response) => { setData(response.data);
+                              setShow(true);
+                              console.log(response.data);
+        });
+    }, []);
+  }
+  
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
@@ -83,7 +113,7 @@ function SignIn() {
         flexDirection='column'>
         <Box me='auto'>
           <Heading color={textColor} fontSize='36px' mb='10px'>
-            로그인
+            로그인 :
           </Heading>
           <Text
             mb='36px'
@@ -94,6 +124,8 @@ function SignIn() {
             구글 인증을 통해 로그인하세요!
           </Text>
         </Box>
+        {!show && <div></div>}
+        {show && (
         <Flex
           zIndex='2'
           direction='column'
@@ -117,7 +149,7 @@ function SignIn() {
             _hover={googleHover}
             _active={googleActive}
             _focus={googleActive}
-            onClick={event => window.location.href='https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost:8000/auth/google/callback&client_id=171244042674-cj5o3p12b4nbtag45gduahi0ojksbgop.apps.googleusercontent.com'}>
+            onClick={event => window.location.href=data.authorization_url } >
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
             Sign in with Google
           </Button>
@@ -125,6 +157,7 @@ function SignIn() {
             <HSeparator />
           </Flex>
         </Flex>
+        ) }
       </Flex>
     </DefaultAuth>
   );

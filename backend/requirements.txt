@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-pydantic
+pydantic[dotenv]
 python-multipart
 fastapi-users[beanie,oauth]
 aiosqlite
+requests

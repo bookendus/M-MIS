@@ -1,6 +1,7 @@
 from beanie import init_beanie
 import motor.motor_asyncio
 
+from app.server.configs import Configs
 
 from app.server.models.users import User
 from app.server.models.customers import Customer
@@ -14,7 +15,7 @@ from app.server.models.attendances import Attendance
 
 async def init_db():
     client = motor.motor_asyncio.AsyncIOMotorClient(
-        "mongodb://root:1234@localhost:27017/"
+        Configs.DB_URL
     )
-
-    await init_beanie(database=client.mydb, document_models=[User, Customer, Project, TimeFrame, Attendance ]) 
+    database = client[Configs.DB_DATABASE]
+    await init_beanie(database=database, document_models=[User, Customer, Project, TimeFrame, Attendance ]) 
